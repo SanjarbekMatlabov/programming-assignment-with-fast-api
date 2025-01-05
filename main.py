@@ -1,5 +1,5 @@
 # main.py
 from fastapi import FastAPI
-from pydantic import BaseModel
-
+from validata.validata import *
+from models.model import *
 app = FastAPI()
