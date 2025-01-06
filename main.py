@@ -63,6 +63,12 @@ def get_orders(user_id: int):
     data = db.query(Order).filter(Order.user_id == user_id).all()
     db.close()
     return list(data)
+@app.get("/api/orders/")
+def get_orders():
+    db = session()
+    data = db.query(Order).all()
+    db.close()
+    return list(data)
 @app.post("/api/user/")
 def create_user(user: UserModel):
     db = session()
