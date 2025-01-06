@@ -8,21 +8,21 @@ app = FastAPI()
 
 def create_product(product: ProductModel):
     db = session()
-    new_product = Product(name = product.name, description = product.description, price = product.price)
+    new_product = Product(name = product.name, description = product.description, price = product.price,quantity = product.quantity)
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
     db.close()
     return new_product
 
-@app.get("/products/get")
+@app.get("/api/products/get")
 def get_flights():
     db = session()
     data = db.query(Product).all()
     db.close()
     return list(data)
 
-@app.put("/products/update/{id}")
+@app.put("/api/products/update/{id}")
 def update_product(id: int, product: ProductModel):
     db = session()
     product_to_update = db.query(Product).filter(Product.id == id).first()
@@ -31,11 +31,12 @@ def update_product(id: int, product: ProductModel):
     product_to_update.name = product.name
     product_to_update.description = product.description
     product_to_update.price = product.price
+    product_to_update.quantity = product.quantity
     db.commit()
     db.close()
     return "Succesfully update"
 
-@app.delete("/products/delete/{id}")
+@app.delete("/api/products/delete/{id}")
 def delete_product(id: int):
     db = session()
     product_to_delete = db.query(Product).filter(Product.id == id).first()
@@ -62,3 +63,12 @@ def get_orders(user_id: int):
     data = db.query(Order).filter(Order.user_id == user_id).all()
     db.close()
     return list(data)
+@app.post("/api/user/")
+def create_user(user: UserModel):
+    db = session()
+    new_user = User(login = user.username, password = user.password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    db.close()
+    return new_user
