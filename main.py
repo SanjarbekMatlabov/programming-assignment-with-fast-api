@@ -29,7 +29,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/api/products", response_model=schemas.Product)
+@app.post("/newera/products", response_model=schemas.Product)
 async def create_product(
     product: schemas.ProductCreate,
     db: Session = Depends(get_db),
@@ -37,7 +37,7 @@ async def create_product(
 ):
     return crud.create_product(db=db, product=product)
 
-@app.get("/api/products/{product_id}", response_model=schemas.Product)
+@app.get("/newera/products/{product_id}", response_model=schemas.Product)
 async def read_product(
     product_id: int,
     db: Session = Depends(get_db),
@@ -45,7 +45,7 @@ async def read_product(
 ):
     return crud.get_product(db=db, product_id=product_id)
 
-@app.put("/api/products/{product_id}", response_model=schemas.Product)
+@app.put("/newera/products/{product_id}", response_model=schemas.Product)
 async def update_product(
     product_id: int,
     product: schemas.ProductCreate,
@@ -54,7 +54,7 @@ async def update_product(
 ):
     return crud.update_product(db=db, product_id=product_id, product=product)
 
-@app.delete("/api/products/{product_id}")
+@app.delete("/newera/products/{product_id}")
 async def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
@@ -66,7 +66,7 @@ async def delete_product(
 # /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 #              MIJOZ XUSUSIYATLARI
 
-@app.get("/api/products", response_model=List[schemas.Product])
+@app.get("/newera/products", response_model=List[schemas.Product])
 async def list_products(
     skip: int = 0,
     limit: int = 100,
@@ -75,7 +75,7 @@ async def list_products(
 ):
     return crud.get_products(db=db, skip=skip, limit=limit)
 
-@app.post("/api/orders", response_model=schemas.Order)
+@app.post("/newera/orders", response_model=schemas.Order)
 async def create_order(
     order: schemas.OrderCreate,
     db: Session = Depends(get_db),
@@ -83,7 +83,7 @@ async def create_order(
 ):
     return crud.create_order(db=db, order=order, user_id=current_user.id)
 
-@app.get("/api/orders/{customer_id}", response_model=List[schemas.Order])
+@app.get("/newera/orders/{customer_id}", response_model=List[schemas.Order])
 async def read_customer_orders(
     customer_id: int,
     db: Session = Depends(get_db),
@@ -93,7 +93,7 @@ async def read_customer_orders(
         raise HTTPException(status_code=403, detail="Not authorized to view these orders")
     return crud.get_user_orders(db=db, user_id=customer_id)
 
-@app.get("/api/orders/{order_id}/status")
+@app.get("/newera/orders/{order_id}/status")
 async def read_order_status(
     order_id: int,
     db: Session = Depends(get_db),
