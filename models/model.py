@@ -1,6 +1,10 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey,Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
+from jose import JWSError,jwt
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from passlib.context import CryptContext
+
 
 DATABASE_URL = "sqlite:///./supermarket.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -32,4 +36,3 @@ class Product(Base):
     price = Column(Float)
 
 Base.metadata.create_all(bind=engine)
-    
