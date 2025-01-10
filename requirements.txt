@@ -1,0 +1,14 @@
+asttokens==3.0.0
+bcrypt==4.2.1
+fastapi==0.115.6
+fastapi-cli==0.0.6
+passlib==1.7.4
+pydantic==2.10.3
+pydantic_core==2.27.1
+python-dotenv==1.0.1
+python-jose==3.3.0
+SQLAlchemy==2.0.36
+SQLAlchemy-Utils==0.41.2
+urllib3==2.2.3
+uvicorn==0.32.1
+websockets==14.1
