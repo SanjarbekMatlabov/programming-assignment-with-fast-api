@@ -90,7 +90,7 @@ async def read_customer_orders(
     current_user: models.User = Depends(get_current_user)
 ):
     if current_user.id != customer_id and not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Not authorized to view these orders")
+        raise HTTPException(status_code=403, detail="Autentifikatsiyadan o'ting")
     return crud.get_user_orders(db=db, user_id=customer_id)
 
 @app.get("/newera/orders/{order_id}/status")
@@ -101,7 +101,7 @@ async def read_order_status(
 ):
     order = crud.get_order(db=db, order_id=order_id)
     if order.customer_id != current_user.id and not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Not authorized to view this order")
+        raise HTTPException(status_code=403, detail="Autentifikatsiyadan o'ting")
     return {"status": order.status}
 
 @app.post("/signup", response_model=schemas.User)
@@ -110,7 +110,7 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(
             status_code=400,
-            detail="Email already registered"
+            detail="Email allaqachon ro'yxatdan o'tgan"
         )
     return crud.create_user(db=db, user=user)
 
@@ -120,6 +120,6 @@ def create_admin(user: schemas.UserCreate, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(
             status_code=400,
-            detail="Email already registered"
+            detail="Email allaqachon ro'yxatdan o'tgan"
         )
     return crud.create_admin(db=db, user=user)
