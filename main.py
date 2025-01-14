@@ -28,13 +28,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/newera/products", response_model=schemas.Product)
-def create_product(
-    product: schemas.ProductCreate,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_admin_user)
-):
-    return crud.create_product(db=db, product=product)
+
 
 @app.get("/newera/products/{product_id}", response_model=schemas.Product)
 def read_product(
@@ -44,23 +38,9 @@ def read_product(
 ):
     return crud.get_product(db=db, product_id=product_id)
 
-@app.put("/newera/products/{product_id}", response_model=schemas.Product)
-def update_product(
-    product_id: int,
-    product: schemas.ProductCreate,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_admin_user)
-):
-    return crud.update_product(db=db, product_id=product_id, product=product)
 
-@app.delete("/newera/products/{product_id}")
-def delete_product(
-    product_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_admin_user)
-):
-    crud.delete_product(db=db, product_id=product_id)
-    return {"message": "Product deleted"}
+
+
 
 # /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 #              MIJOZ XUSUSIYATLARI
@@ -80,26 +60,6 @@ def create_order(
 ):
     return crud.create_order(db=db, order=order, user_id=current_user.id)
 
-@app.get("/newera/orders/{customer_id}", response_model=List[schemas.Order])
-def read_customer_orders(
-    customer_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    if current_user.id != customer_id and not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Autentifikatsiyadan o'ting")
-    return crud.get_user_orders(db=db, user_id=customer_id)
-
-@app.get("/newera/orders/{order_id}/status")
-def read_order_status(
-    order_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    order = crud.get_order(db=db, order_id=order_id)
-    if order.customer_id != current_user.id and not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Autentifikatsiyadan o'ting")
-    return {"status": order.status}
 
 @app.post("/signup", response_model=schemas.User)
 def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
