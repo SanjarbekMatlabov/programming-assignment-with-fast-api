@@ -17,8 +17,8 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
-def get_products(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Product).offset(skip).limit(limit).all()
+def get_products(db: Session):
+    return db.query(models.Product)
 
 def create_product(db: Session, product: schemas.ProductCreate):
     db_product = models.Product(**product.dict())
