@@ -1,9 +1,19 @@
-from fastapi import FastAPI
-from routers import admin, customer
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+from  auth import *
+from crud import *
+import crud,models,auth,schemas,database
+from  models import *
+from schemas import *
+from database import SessionLocal, engine
+from typing import List
+import auth
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-<<<<<<< HEAD
 @app.post("/token")
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(db, form_data.username, form_data.password)
@@ -111,10 +121,3 @@ def create_admin(user: schemas.UserCreate, db: Session = Depends(get_db)):
             detail="Email allaqachon ro'yxatdan o'tgan"
         )
     return crud.create_admin(db=db, user=user)
-=======
-# Customer routerini ulash
-app.include_router(customer.router)
-
-# Admin routerini ulash
-app.include_router(admin.router)
->>>>>>> b623c5e7d907f28bb9129cd6d4d6561d68256e0a
