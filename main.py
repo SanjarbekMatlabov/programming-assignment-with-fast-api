@@ -112,12 +112,12 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
         )
     return crud.create_user(db=db, user=user)
 
-@app.post("/signup/admin", response_model=schemas.User)
-def create_admin(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=user.email)
-    if db_user:
-        raise HTTPException(
-            status_code=400,
-            detail="Email allaqachon ro'yxatdan o'tgan"
-        )
-    return crud.create_admin(db=db, user=user)
+# @app.post("/signup/admin", response_model=schemas.User)
+# def create_admin(user: schemas.UserCreate, db: Session = Depends(get_db)):
+#     db_user = crud.get_user_by_email(db, email=user.email)
+#     if db_user:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="Email allaqachon ro'yxatdan o'tgan"
+#         )
+#     return crud.create_admin(db=db, user=user)
