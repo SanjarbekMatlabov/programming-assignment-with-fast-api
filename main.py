@@ -29,7 +29,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/newera/products", response_model=schemas.Product)
+@app.post("/admin/newera/products", response_model=schemas.Product)
 def create_product(
     product: schemas.ProductCreate,
     db: Session = Depends(get_db),

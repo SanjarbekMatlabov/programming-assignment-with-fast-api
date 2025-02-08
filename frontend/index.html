@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yangiliklar Sayti</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .news-container { margin-top: 20px; }
+        .news-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+        .admin-panel { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Yangiliklar</h1>
+    <div id="news" class="news-container"></div>
+    
+    <div class="admin-panel">
+        <h2>Admin Panel</h2>
+        <input type="text" id="username" placeholder="Admin login"> 
+        <input type="password" id="password" placeholder="Parol"> 
+        <button onclick="adminLogin()">Kirish</button>
+        <br><br>
+        <input type="text" id="title" placeholder="Yangilik sarlavhasi"> 
+        <textarea id="content" placeholder="Yangilik mazmuni"></textarea>
+        <button onclick="addNews()">Yangilik qo‘shish</button>
+    </div>
+    
+    <script>
+        // Yangiliklarni yuklash
+        function loadNews() {
+            fetch("http://localhost:8000/newera/products")
+                .then(response => response.json())
+                .then(data => {
+                    let newsHTML = "";
+                    data.forEach(news => {
+                        newsHTML += `<div class='news-item'><h3>${news.title}</h3><p>${news.content}</p></div>`;
+                    });
+                    document.getElementById("news").innerHTML = newsHTML;
+                });
+        }
+        loadNews();
+        
+        // Admin login qilish
+        function adminLogin() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            
+            fetch("http://localhost:8000/admin/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem("token", data.access_token);
+                alert("Admin sifatida kirdingiz!");
+            })
+            .catch(error => alert("Login xato!"));
+        }
+        
+        // Yangilik qo‘shish
+        function addNews() {
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
+            let token = localStorage.getItem("token");
+            
+            fetch("http://localhost:8000/admin/newera/products", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Authorization": "Bearer " + token 
+                },
+                body: JSON.stringify({ title, content })
+            })
+            .then(response => response.json())
+            .then(() => {
+                alert("Yangilik qo‘shildi!");
+                loadNews();
+            })
+            .catch(error => alert("Xatolik yuz berdi!"));
+        }
+    </script>
+</body>
+</html>
